@@ -2,7 +2,7 @@ Excellent question! Production deployment ke liye **priority-wise** yeh topics s
 
 ---
 
-## 🔥 TOP 5 CRITICAL TOPICS (Production Mai Roz Use Honge)
+## 🔥 TOP 5 CRITICAL TOPICS (Production)
 
 ### **1. Terraform Modules (90% Usage)**
 ```
@@ -198,7 +198,6 @@ Day 7: Full Production Deployment
 
 ---
 
-## 💡 REAL PRODUCTION SCENARIO - KYA USE HOGA?
 
 ### **Scenario: E-commerce Application Deploy**
 
@@ -381,5 +380,3 @@ Using: Variables + Workspaces + for_each
 # Afternoon (2 hours): Hands-on practice
 # Evening (1 hour): Real project work
 ```
-
-Koi specific topic pe detailed examples chahiye? Ya practice exercises? Batao! 🚀
