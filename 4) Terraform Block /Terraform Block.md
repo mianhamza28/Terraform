@@ -47,7 +47,9 @@ The `provider` block **configures a specific provider** — credentials, region,
 
 ---
 
-### Recommended Minimum for Any Real Project
+### Recommended Minimum for Any Real Project 
+
+https://registry.terraform.io/browse/providers?tier=partner-premier%2Cofficial%2Cpartner
 
 ```hcl
 # Terraform block - lock versions & configure backend
@@ -68,3 +70,5 @@ provider "aws" {
 ```
 
 In short — the `terraform` block is about **stability and consistency**, while the `provider` block is about **connectivity and authentication**.
+
+### We Don't Use Multiple Provider at same time 
