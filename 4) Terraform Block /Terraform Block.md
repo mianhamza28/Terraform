@@ -153,3 +153,119 @@ provider "x" { }  →  One per provider you use (configures connection)
 ```
 
 > In short — the `terraform` block is about **stability and consistency**, while the `provider` block is about **connectivity and authentication**.
+
+## `terraform init -upgrade`
+
+### What Does It Do?
+
+The `-upgrade` flag tells Terraform to **ignore the existing lock file** and **upgrade all providers** to the **latest allowed version** based on your version constraints — without manually deleting `.terraform.lock.hcl`.
+
+---
+
+### Normal `terraform init` vs `terraform init -upgrade`
+
+| Behavior | `terraform init` | `terraform init -upgrade` |
+|---|---|---|
+| Reads lock file | ✅ Yes | ⚠️ Ignores it |
+| Downloads new version | ❌ No (uses locked) | ✅ Yes (fetches latest allowed) |
+| Updates lock file | ❌ No | ✅ Yes (rewrites it) |
+| Deletes lock file needed | ❌ No | ❌ No (handles automatically) |
+| Safe for production | ✅ Yes | ⚠️ Use carefully |
+
+---
+
+### Practical Example
+
+**Your config:**
+```hcl
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"   # allows 6.x.x but not 7.x.x
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+```
+
+**Scenario:**
+```
+First init  → downloads 6.30.0  → locked in .terraform.lock.hcl
+New release → 6.34.0 is now available
+```
+
+**Without `-upgrade`:**
+```bash
+terraform init
+# ✅ Still uses 6.30.0 (respects lock file)
+```
+
+**With `-upgrade`:**
+```bash
+terraform init -upgrade
+# ✅ Upgrades to 6.34.0 (latest matching ~> 6.0)
+# ✅ Rewrites .terraform.lock.hcl automatically
+```
+
+---
+
+### The Full Flow — Visualized
+
+```
+version = "~> 6.0"
+        │
+        ▼
+terraform init          →  locks  6.30.0  →  .terraform.lock.hcl
+        │
+   (time passes)
+        │
+   6.34.0 released
+        │
+        ▼
+terraform init          →  still uses  6.30.0  ❌ (no upgrade)
+terraform init -upgrade →  upgrades to 6.34.0  ✅ (rewrites lock)
+```
+
+---
+
+### When to Use `-upgrade`
+
+| Situation | Use `-upgrade`? |
+|---|---|
+| Upgrading providers in dev/staging | ✅ Yes |
+| Getting latest bug fixes / security patches | ✅ Yes |
+| Changed version constraint in `.tf` file | ✅ Yes |
+| Production environment (be cautious) | ⚠️ Test first |
+| Switching to a lower version | ❌ No — manually delete lock file instead |
+
+---
+
+### `-upgrade` vs Manually Deleting Lock File
+
+```bash
+# Option 1 — Manual (old way)
+rm -rf .terraform.lock.hcl
+terraform init
+
+# Option 2 — Cleaner way ✅
+terraform init -upgrade
+```
+
+> `terraform init -upgrade` is the **official, cleaner approach** — no need to manually delete the lock file.
+
+---
+
+### Important Rule to Remember
+
+> 🔒 **The lock file (`.terraform.lock.hcl`) is your safety net.**
+> Commit it to Git so your whole team uses the **same provider versions**.
+> Only run `-upgrade` intentionally — not by habit.
+
+```bash
+git add .terraform.lock.hcl
+git commit -m "chore: upgrade AWS provider to 6.34.0"
+```
