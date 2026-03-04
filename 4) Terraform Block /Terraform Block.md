@@ -71,4 +71,34 @@ provider "aws" {
 
 In short — the `terraform` block is about **stability and consistency**, while the `provider` block is about **connectivity and authentication**.
 
-### We Don't Use Multiple Provider at same time 
+```hcl
+terraform {
+  required_providers {
+    oci = {
+      source  = "oracle/oci"
+      version = "3.0.0"
+    }
+
+    acmp = {
+      source  = "toowork/acmp"
+      version = "0.0.4"
+    }
+  }
+}
+
+provider "oci" {
+  # OCI provider configuration here
+}
+
+provider "acmp" {
+  # ACMP provider configuration here
+}
+
+provider "aww" {
+  # If this provider exists, configure it properly
+}
+```
+
+### We Don't Use Multiple Provider at same time But Use Provider Block at same time
+
+
