@@ -31,6 +31,18 @@ Day 7:   MINI PROJECT 🎯
          → VPC create karo with variables
          → EC2 instance launch karo
          → Security group with outputs
+
+Week 1 (Phase 1) → Days 1-7  ✅ as planned
+                     ↓
+── NEW: Import Day ──────────────
+Week 1, Day 8 (ya Week 2, Day 1 se pehle)
+  → terraform import CLI
+  → Import block (TF 1.5+)
+  → terraform show, terraform state list
+  → Practice: existing EC2 import karo
+─────────────────────────────────
+                     ↓
+Week 2 (Phase 2) → Days 1-7  ✅ as planned
 ```
 
 **✅ Sahi hai, but add this:**
